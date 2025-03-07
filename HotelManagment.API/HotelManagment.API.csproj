@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HotelManagment.Models\HotelManagment.Models.csproj" />
+    <ProjectReference Include="..\HotelManagment.Repository\HotelManagment.Repository.csproj" />
+    <ProjectReference Include="..\HotelManagment.Service\HotelManagment.Service.csproj" />
+  </ItemGroup>
+
+</Project>
