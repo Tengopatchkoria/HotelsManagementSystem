@@ -1,4 +1,7 @@
 
+using HotelManagment.Repository.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace HotelManagment.API
 {
     public class Program
@@ -9,6 +12,7 @@ namespace HotelManagment.API
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=ANCARAMESSI\\SQLEXPRESS;Database=HotelManagmentBase;Trusted_Connection=true;TrustServerCertificate=true"));
 
             var app = builder.Build();
 
