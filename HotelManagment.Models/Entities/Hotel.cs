@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace HotelManagment.Models.Entities
 {
@@ -15,6 +10,7 @@ namespace HotelManagment.Models.Entities
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+        [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
         [Required]
         public int Rating { get; set; }
         [Required]
@@ -23,5 +19,16 @@ namespace HotelManagment.Models.Entities
         public string City { get; set; }
         [Required]
         public string Address { get; set; }
+
+        //1X1
+        public int ManagerId { get; set; }
+        public Manager Manager { get; set; }
+
+        //1XM
+        public List<Room> Rooms { get; set; }
+
+        //MXM
+        public List<HotelBooking> HotelBookings { get; set; }
+
     }
 }

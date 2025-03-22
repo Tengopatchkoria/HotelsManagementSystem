@@ -4,6 +4,7 @@ using HotelManagment.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagment.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250318222959_tablesUpdate")]
+    partial class tablesUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,6 +126,11 @@ namespace HotelManagment.Repository.Migrations
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BookingId");
@@ -175,7 +183,7 @@ namespace HotelManagment.Repository.Migrations
                     b.ToTable("Managers");
                 });
 
-            modelBuilder.Entity("HotelManagment.Models.Entities.Room", b =>
+            modelBuilder.Entity("HotelManagment.Models.Entities.RoomNum", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -209,7 +217,7 @@ namespace HotelManagment.Repository.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("RoomNums");
                 });
 
             modelBuilder.Entity("HotelManagment.Models.Entities.HotelBooking", b =>
@@ -242,14 +250,14 @@ namespace HotelManagment.Repository.Migrations
                     b.Navigation("Hotel");
                 });
 
-            modelBuilder.Entity("HotelManagment.Models.Entities.Room", b =>
+            modelBuilder.Entity("HotelManagment.Models.Entities.RoomNum", b =>
                 {
                     b.HasOne("HotelManagment.Models.Entities.Guest", "Guest")
                         .WithOne("Room")
-                        .HasForeignKey("HotelManagment.Models.Entities.Room", "GuestId");
+                        .HasForeignKey("HotelManagment.Models.Entities.RoomNum", "GuestId");
 
                     b.HasOne("HotelManagment.Models.Entities.Hotel", "Hotel")
-                        .WithMany("Rooms")
+                        .WithMany("RoomNums")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -275,7 +283,7 @@ namespace HotelManagment.Repository.Migrations
 
                     b.Navigation("Manager");
 
-                    b.Navigation("Rooms");
+                    b.Navigation("RoomNums");
                 });
 #pragma warning restore 612, 618
         }

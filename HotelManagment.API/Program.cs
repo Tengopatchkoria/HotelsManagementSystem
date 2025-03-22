@@ -1,5 +1,9 @@
-
 using HotelManagment.Repository.Data;
+using HotelManagment.Repository.Implementations;
+using HotelManagment.Repository.Interfaces;
+using HotelManagment.Service.Implementations;
+using HotelManagment.Service.Interfaces;
+using HotelManagment.Service.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagment.API
@@ -12,7 +16,16 @@ namespace HotelManagment.API
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=ANCARAMESSI\\SQLEXPRESS;Database=HotelManagmentBase;Trusted_Connection=true;TrustServerCertificate=true"));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerConnection")));
+            builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddScoped<IGuestRepository, GuestRepository>();
+            builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
+            builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+
+            builder.Services.AddScoped<IHotelService, HotelService>();
+
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             var app = builder.Build();
 
