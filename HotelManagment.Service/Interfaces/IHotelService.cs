@@ -16,6 +16,7 @@ namespace HotelManagment.Service.Interfaces
         Task AddHotel(HotelsForCreatingDto hotel);
         Task UpdateHotel(HotelsForUpdatingDto hotel);
         Task DeleteHotel(int HotelId);
+        Task AssignManagerToHotel(AssignManagerDto dto);
         Task SaveHotel();
     }
 }

@@ -27,7 +27,7 @@ namespace HotelManagment.Models.Entities
 
         [Required]
         [StringLength(9)]
-        [Column(TypeName = "char(9)")]
+        [Column(TypeName = "char(50)")]
         public string PhoneNumber { get; set; }
 
         //1X1

@@ -20,9 +20,8 @@ namespace HotelManagment.Models.Entities
         [Required]
         public string Address { get; set; }
 
-        //1X1
-        public int ManagerId { get; set; }
-        public Manager Manager { get; set; }
+        //1XM
+        public List<Manager> ManagerList { get; set; }
 
         //1XM
         public List<Room> Rooms { get; set; }

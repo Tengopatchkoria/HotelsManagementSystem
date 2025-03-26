@@ -17,10 +17,84 @@ namespace HotelManagment.Repository.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("HotelManagment.Models.Entities.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("Users", (string)null);
+                });
 
             modelBuilder.Entity("HotelManagment.Models.Entities.Booking", b =>
                 {
@@ -33,10 +107,21 @@ namespace HotelManagment.Repository.Migrations
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("GuestId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("LeaveDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("GuestId")
+                        .IsUnique();
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Bookings");
                 });
@@ -54,9 +139,10 @@ namespace HotelManagment.Repository.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("IdentityNumber")
+                    b.Property<string>("IdentityNumber")
+                        .IsRequired()
                         .HasMaxLength(11)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -93,9 +179,6 @@ namespace HotelManagment.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ManagerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -107,6 +190,26 @@ namespace HotelManagment.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hotels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Rustaveli Avenue 12",
+                            City = "Tbilisi",
+                            Country = "Georgia",
+                            Name = "Grand Palace Hotel",
+                            Rating = 5
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Black Sea Blvd 5",
+                            City = "Batumi",
+                            Country = "Georgia",
+                            Name = "Luxury Resort",
+                            Rating = 4
+                        });
                 });
 
             modelBuilder.Entity("HotelManagment.Models.Entities.HotelBooking", b =>
@@ -153,26 +256,48 @@ namespace HotelManagment.Repository.Migrations
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdentityNumber")
+                    b.Property<string>("IdentityNumber")
+                        .IsRequired()
                         .HasMaxLength(11)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PersonalNumber")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(9)
-                        .HasColumnType("char(9)");
+                        .HasColumnType("char(50)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelId")
-                        .IsUnique();
+                    b.HasIndex("HotelId");
 
                     b.ToTable("Managers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "giorgi@example.com",
+                            FirstName = "Giorgi",
+                            HotelId = 1,
+                            IdentityNumber = "12345678901",
+                            LastName = "Beridze",
+                            PhoneNumber = "+995555123456"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "nino@example.com",
+                            FirstName = "Nino",
+                            HotelId = 2,
+                            IdentityNumber = "98765432109",
+                            LastName = "Kopaleishvili",
+                            PhoneNumber = "+995599987654"
+                        });
                 });
 
             modelBuilder.Entity("HotelManagment.Models.Entities.Room", b =>
@@ -197,9 +322,8 @@ namespace HotelManagment.Repository.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Price")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -210,6 +334,182 @@ namespace HotelManagment.Repository.Migrations
                     b.HasIndex("HotelId");
 
                     b.ToTable("Rooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Free = true,
+                            HotelId = 1,
+                            Name = "Deluxe Suite",
+                            Price = 150
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Free = false,
+                            HotelId = 1,
+                            Name = "Standard Room",
+                            Price = 90
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Free = true,
+                            HotelId = 2,
+                            Name = "Ocean View Room",
+                            Price = 200
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("Roles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("UserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("HotelManagment.Models.Entities.Booking", b =>
+                {
+                    b.HasOne("HotelManagment.Models.Entities.Guest", "Guest")
+                        .WithOne("booking")
+                        .HasForeignKey("HotelManagment.Models.Entities.Booking", "GuestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelManagment.Models.Entities.Room", "Room")
+                        .WithMany("Bookings")
+                        .HasForeignKey("RoomId");
+
+                    b.Navigation("Guest");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("HotelManagment.Models.Entities.HotelBooking", b =>
@@ -234,8 +534,8 @@ namespace HotelManagment.Repository.Migrations
             modelBuilder.Entity("HotelManagment.Models.Entities.Manager", b =>
                 {
                     b.HasOne("HotelManagment.Models.Entities.Hotel", "Hotel")
-                        .WithOne("Manager")
-                        .HasForeignKey("HotelManagment.Models.Entities.Manager", "HotelId")
+                        .WithMany("ManagerList")
+                        .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -259,6 +559,57 @@ namespace HotelManagment.Repository.Migrations
                     b.Navigation("Hotel");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("HotelManagment.Models.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("HotelManagment.Models.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelManagment.Models.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("HotelManagment.Models.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("HotelManagment.Models.Entities.Booking", b =>
                 {
                     b.Navigation("HotelBookings");
@@ -267,15 +618,22 @@ namespace HotelManagment.Repository.Migrations
             modelBuilder.Entity("HotelManagment.Models.Entities.Guest", b =>
                 {
                     b.Navigation("Room");
+
+                    b.Navigation("booking");
                 });
 
             modelBuilder.Entity("HotelManagment.Models.Entities.Hotel", b =>
                 {
                     b.Navigation("HotelBookings");
 
-                    b.Navigation("Manager");
+                    b.Navigation("ManagerList");
 
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("HotelManagment.Models.Entities.Room", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

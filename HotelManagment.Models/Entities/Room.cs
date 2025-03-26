@@ -14,7 +14,7 @@ namespace HotelManagment.Models.Entities
         [Required]
         public Boolean Free { get; set; }
         [Required]
-        public string Price { get; set; }
+        public int Price { get; set; }
 
         //1XM
         [ForeignKey(nameof(Hotel))]
@@ -24,6 +24,9 @@ namespace HotelManagment.Models.Entities
         //1X1
         public int? GuestId { get; set; }
         public Guest Guest { get; set; }
+
+        //1XM
+        public List<Booking> Bookings { get; set; }
 
     }
 }

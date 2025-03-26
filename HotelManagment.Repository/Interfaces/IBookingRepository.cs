@@ -9,5 +9,6 @@ namespace HotelManagment.Repository.Interfaces
 {
     public interface IBookingRepository : IRepositoryBase<Booking>, IUpdatable<Booking>
     {
+        Task<List<Booking>> GetOverlappingBookingsAsync(int? roomId, DateTime EntryDate, DateTime LeaveDate, int? excludeBookingId = null);
     }
 }

@@ -17,7 +17,7 @@ namespace HotelManagment.Models.Entities
         public string LastName { get; set; }
         [Required]
         [MaxLength(11)]
-        public int IdentityNumber { get; set; }
+        public string IdentityNumber { get; set; }
 
         [Required]
         [StringLength(9)]
@@ -26,5 +26,8 @@ namespace HotelManagment.Models.Entities
 
         //1X1
         public Room Room { get; set; }
+
+        //1X1
+        public Booking? booking { get; set; }
     }
 }

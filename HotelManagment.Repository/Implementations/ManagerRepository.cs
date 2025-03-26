@@ -28,7 +28,7 @@ namespace HotelManagment.Repository.Implementations
                 entityFromDb.LastName = entity.LastName;
                 entityFromDb.IdentityNumber = entity.IdentityNumber;
                 entityFromDb.Email = entity.Email;
-                entityFromDb.PersonalNumber = entity.PersonalNumber;
+                entityFromDb.PhoneNumber = entity.PhoneNumber;
             }
         }
     }

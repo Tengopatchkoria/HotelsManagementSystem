@@ -1,4 +1,5 @@
-﻿using HotelManagment.Models.Entities;
+﻿using HotelManagment.Models.Dtos.Rooms;
+using HotelManagment.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,10 @@ namespace HotelManagment.Service.Interfaces
 {
     public interface IRoomService
     {
-        Task AddRoomToHotel(Room room, int hotelId);
-        Task RoomAvailability(int roomId);
-        Task PriceValidation(int roomId);
-        Task UpdateRoom(Room room);
+        Task AddRoomToHotel(RoomsForCreatingDto roomsForCreatingDto);
+        Task UpdateRoom(RoomsForUpdatingDto roomsForUpdatingDto);
         Task RemoveRoom(int roomId);
-        Task<List<Room>> FilterRooms();
+        Task<List<Room>> FilterRooms(int? hotelId, bool? isAvailable, decimal? minPrice, decimal? maxPrice);
         Task SaveRoom();
     }
 }

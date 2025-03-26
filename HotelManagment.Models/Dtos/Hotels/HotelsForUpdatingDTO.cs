@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HotelManagment.Models.Dtos.Hotels
 {
-    public class HotelsForUpdatingDTO
+    public class HotelsForUpdatingDto
     {
         [Required]
         public string Name { get; set; }

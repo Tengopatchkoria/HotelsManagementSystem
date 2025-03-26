@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotelManagment.Models.Entities
@@ -17,6 +18,17 @@ namespace HotelManagment.Models.Entities
         [Required]
         [Column(TypeName = "datetime2")]
         public DateTime LeaveDate { get; set; }
+
+        //1X1
+        [ForeignKey(nameof(Guest))]
+        public int GuestId { get; set; }
+        public Guest Guest { get; set; }
+
+
+        [ForeignKey(nameof(Room))]
+        public int? RoomId { get; set; }
+        public Room Room { get; set; }
+
 
         //MXM
         public List<HotelBooking> HotelBookings { get; set; }
