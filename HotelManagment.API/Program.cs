@@ -39,6 +39,8 @@ namespace HotelManagment.API
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IRoomService, RoomService>();
             builder.Services.AddScoped<IManagerService, ManagerService>();
+            builder.Services.AddScoped<IGuestService, GuestService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             builder.Services.AddScoped<IAuthService, AuthService>();
 

@@ -75,5 +75,34 @@ namespace HotelManagment.Repository.Data
         );
         }
 
+        public static void seedGuests(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Guest>().HasData(
+           new Guest { Id = 1, FirstName = "John", LastName = "Doe", IdentityNumber = "12345678901", PhoneNumber = "+995599111111" },
+           new Guest { Id = 2, FirstName = "Alice", LastName = "Smith", IdentityNumber = "98765432109", PhoneNumber = "+995599222222" }
+           );
+        }
+
+        public static void seedBookings(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Booking>().HasData(
+            new Booking
+            {
+                Id = 1,
+                GuestId = 1,
+                RoomId = 1,
+                EntryDate = DateTime.UtcNow.AddDays(2),
+                LeaveDate = DateTime.UtcNow.AddDays(5),
+            },
+            new Booking
+            {
+                Id = 2,
+                GuestId = 2,
+                RoomId = 2,
+                EntryDate = DateTime.UtcNow.AddDays(3),
+                LeaveDate = DateTime.UtcNow.AddDays(7),
+            }
+            );
+        }
     }
 }

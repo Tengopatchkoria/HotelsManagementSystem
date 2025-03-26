@@ -9,7 +9,7 @@ namespace HotelManagment.Models.Dtos.Idenitity
     public class LoginRequestDto
     {
         public string UserName { get; set; }
-        public string password { get; set; }
+        public string Password { get; set; }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HotelManagment.Models.Dtos.Guest;
 using HotelManagment.Models.Dtos.Hotels;
+using HotelManagment.Models.Dtos.Idenitity;
 using HotelManagment.Models.Dtos.Manager;
 using HotelManagment.Models.Dtos.Rooms;
 using HotelManagment.Models.Entities;
@@ -31,6 +32,11 @@ namespace HotelManagment.Service.Mapping
             CreateMap<RoomsForUpdatingDto, Room>();
             CreateMap<ManagerForUpdatingDto, Manager>();
             CreateMap<GuestForUpdatingDto, Guest>();
+
+            CreateMap<UserDto, ApplicationUser>().ReverseMap();
+            CreateMap<RegistrationRequestDto, ApplicationUser>()
+               .ForMember(dest => dest.UserName, options => options.MapFrom(src => src.IdentityNumber))
+               .ForMember(dest => dest.NormalizedUserName, options => options.MapFrom(src => src.IdentityNumber))
         }
     }
 }
