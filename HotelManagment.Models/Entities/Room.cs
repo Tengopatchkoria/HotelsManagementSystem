@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace HotelManagment.Models.Entities
 {
@@ -19,6 +20,7 @@ namespace HotelManagment.Models.Entities
         //1XM
         [ForeignKey(nameof(Hotel))]
         public int HotelId { get; set; }
+        
         public Hotel Hotel { get; set; }
 
         //1X1

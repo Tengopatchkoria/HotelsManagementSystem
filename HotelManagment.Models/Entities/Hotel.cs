@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace HotelManagment.Models.Entities
 {
@@ -21,13 +22,11 @@ namespace HotelManagment.Models.Entities
         public string Address { get; set; }
 
         //1XM
-        public List<Manager> ManagerList { get; set; }
+        public List<Manager> ManagerList { get; set; } = [];
 
         //1XM
+        [JsonIgnore]
         public List<Room> Rooms { get; set; }
-
-        //MXM
-        public List<HotelBooking> HotelBookings { get; set; }
 
     }
 }

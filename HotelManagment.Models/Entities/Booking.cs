@@ -19,18 +19,10 @@ namespace HotelManagment.Models.Entities
         [Column(TypeName = "datetime2")]
         public DateTime LeaveDate { get; set; }
 
-        //1X1
-        [ForeignKey(nameof(Guest))]
-        public int GuestId { get; set; }
-        public Guest Guest { get; set; }
-
-
         [ForeignKey(nameof(Room))]
-        public int? RoomId { get; set; }
+        public int RoomId { get; set; }
         public Room Room { get; set; }
 
-
-        //MXM
-        public List<HotelBooking> HotelBookings { get; set; }
+        public List<GuestBooking> GuestBookings { get; set; }
     }
 }

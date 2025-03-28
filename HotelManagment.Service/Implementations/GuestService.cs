@@ -49,7 +49,7 @@ namespace HotelManagment.Service.Implementations
                 throw new NotFoundException("Guest not found");
             }
             
-            if(GuestToDelete.booking is null)
+            if(GuestToDelete.GuestBookings is not null)
                 throw new DeletionNotAllowedException("Cannot Remove Guest.They Have Active Booking");
 
             _guestRepository.Remove(GuestToDelete);

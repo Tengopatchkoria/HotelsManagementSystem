@@ -20,14 +20,14 @@ namespace HotelManagment.Models.Entities
         public string IdentityNumber { get; set; }
 
         [Required]
-        [StringLength(9)]
-        [Column(TypeName = "char(9)")]
+        [StringLength(50)]
+        [Column(TypeName = "char(50)")]
         public string PhoneNumber { get; set; }
 
         //1X1
         public Room Room { get; set; }
 
         //1X1
-        public Booking? booking { get; set; }
+        public List<GuestBooking> GuestBookings { get; set; }
     }
 }

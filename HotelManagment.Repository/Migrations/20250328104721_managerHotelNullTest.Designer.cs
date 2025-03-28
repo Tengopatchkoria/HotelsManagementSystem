@@ -4,6 +4,7 @@ using HotelManagment.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagment.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250328104721_managerHotelNullTest")]
+    partial class managerHotelNullTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,16 +103,16 @@ namespace HotelManagment.Repository.Migrations
                         {
                             Id = "101",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0db7cf62-31ab-432f-9588-bd0d9d246b97",
+                            ConcurrencyStamp = "18e80b76-c519-4289-89d5-78681f6dd2e0",
                             EmailConfirmed = false,
                             FirstName = "admin",
                             IdentityNumber = "00201071653",
                             LastName = "admingero",
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOn3nZ3iVPiE4SFNw+nMZlCtQ36QSzRiqN4bv6qwK7JcA0smasDSAAZYfEzDQy2WhA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJdAYyh7LQOny3GUCzbCT/H0ATwtihuizj8UMD2A62BwVCbQ8CMtnN6wjNP4aLrfnQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "688b4ea0-4b38-4cc3-a024-a7b5cc74e9b7",
+                            SecurityStamp = "008931d8-39c4-4a5f-89ab-964eb02d0f69",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
@@ -117,16 +120,16 @@ namespace HotelManagment.Repository.Migrations
                         {
                             Id = "102",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3a02ee63-1a28-464d-bbf7-5479ec9905b4",
+                            ConcurrencyStamp = "61c37415-a77b-462c-a349-d6d07dc8dbe4",
                             EmailConfirmed = false,
                             FirstName = "manager",
                             IdentityNumber = "00201071653",
                             LastName = "mangero",
                             LockoutEnabled = false,
                             NormalizedUserName = "MANAGER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFe8FC3hb8hM5xTqGLh/OwwS8rxupRmZRWAkq44Hbq1vFanNkp1JXemVLDpRdTsx6g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBUnkISlb8o4Q8ssuuH7CrY+2/LVnqcxlO1yY7rOUz1PjvhjMzKh8TdDETGwtJZXcA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d9df42b0-d8ab-4143-9de6-d067ed4d4adf",
+                            SecurityStamp = "51f6f053-1a9d-4eef-8d33-07b111a17425",
                             TwoFactorEnabled = false,
                             UserName = "manager"
                         },
@@ -134,16 +137,16 @@ namespace HotelManagment.Repository.Migrations
                         {
                             Id = "103",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b8d3a100-6b39-4ead-a6cb-aabffe73405a",
+                            ConcurrencyStamp = "384b3c7f-992e-4370-9468-18b32ac7b10f",
                             EmailConfirmed = false,
                             FirstName = "guest",
                             IdentityNumber = "10201171653",
                             LastName = "guestgero",
                             LockoutEnabled = false,
                             NormalizedUserName = "GUEST",
-                            PasswordHash = "AQAAAAIAAYagAAAAENBqsNuHdxD+AVr/0mDCnB34tVjecICC4KDdJDyHD6xx5xvdSoRQfT9GakGaxqtjow==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL6xXBv8IegPPByXcGzxE59+tTWtVWoLXSTQOQJ78uucbtFWoBcjOChzDvsJWux/bw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "97cbee99-2e35-42d3-b52f-d763625bb6db",
+                            SecurityStamp = "db3809ec-1f20-4526-ae23-c15049dccd50",
                             TwoFactorEnabled = false,
                             UserName = "guest"
                         });
@@ -176,15 +179,15 @@ namespace HotelManagment.Repository.Migrations
                         new
                         {
                             Id = 1,
-                            EntryDate = new DateTime(2025, 3, 30, 11, 56, 45, 267, DateTimeKind.Utc).AddTicks(2233),
-                            LeaveDate = new DateTime(2025, 4, 2, 11, 56, 45, 267, DateTimeKind.Utc).AddTicks(2619),
+                            EntryDate = new DateTime(2025, 3, 30, 10, 47, 20, 599, DateTimeKind.Utc).AddTicks(5861),
+                            LeaveDate = new DateTime(2025, 4, 2, 10, 47, 20, 599, DateTimeKind.Utc).AddTicks(6238),
                             RoomId = 1
                         },
                         new
                         {
                             Id = 2,
-                            EntryDate = new DateTime(2025, 3, 31, 11, 56, 45, 267, DateTimeKind.Utc).AddTicks(2880),
-                            LeaveDate = new DateTime(2025, 4, 4, 11, 56, 45, 267, DateTimeKind.Utc).AddTicks(2881),
+                            EntryDate = new DateTime(2025, 3, 31, 10, 47, 20, 599, DateTimeKind.Utc).AddTicks(6554),
+                            LeaveDate = new DateTime(2025, 4, 4, 10, 47, 20, 599, DateTimeKind.Utc).AddTicks(6555),
                             RoomId = 2
                         });
                 });

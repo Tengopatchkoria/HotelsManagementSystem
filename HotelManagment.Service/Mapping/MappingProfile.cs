@@ -36,7 +36,7 @@ namespace HotelManagment.Service.Mapping
             CreateMap<UserDto, ApplicationUser>().ReverseMap();
             CreateMap<RegistrationRequestDto, ApplicationUser>()
                .ForMember(dest => dest.UserName, options => options.MapFrom(src => src.IdentityNumber))
-               .ForMember(dest => dest.NormalizedUserName, options => options.MapFrom(src => src.IdentityNumber))
+               .ForMember(dest => dest.NormalizedUserName, options => options.MapFrom(src => src.IdentityNumber));
         }
     }
 }

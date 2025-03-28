@@ -89,7 +89,6 @@ namespace HotelManagment.Repository.Data
             new Booking
             {
                 Id = 1,
-                GuestId = 1,
                 RoomId = 1,
                 EntryDate = DateTime.UtcNow.AddDays(2),
                 LeaveDate = DateTime.UtcNow.AddDays(5),
@@ -97,11 +96,71 @@ namespace HotelManagment.Repository.Data
             new Booking
             {
                 Id = 2,
-                GuestId = 2,
                 RoomId = 2,
                 EntryDate = DateTime.UtcNow.AddDays(3),
                 LeaveDate = DateTime.UtcNow.AddDays(7),
             }
+            );
+        }
+        public static void seedGuestBookings(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GuestBooking>().HasData(
+                new GuestBooking { Id = 1, GuestId = 1, BookingId = 1 },
+                new GuestBooking { Id = 2, GuestId = 2, BookingId = 2 }
+            );
+        }
+
+        public static void seedRoles(this ModelBuilder builder)
+        {
+            builder.Entity<IdentityRole>().HasData(
+                new IdentityRole { Id = "1", Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole { Id = "2", Name = "Manager", NormalizedName = "MANAGER" },
+                new IdentityRole { Id = "3", Name = "Guest", NormalizedName = "GUEST" }
+            );
+        }
+        public static void seedUsers(this ModelBuilder builder)
+        {
+            var hasher = new PasswordHasher<ApplicationUser>();
+
+            var admin = new ApplicationUser
+            {
+                Id = "101",
+                UserName = "admin",
+                NormalizedUserName = "ADMIN",
+                FirstName = "admin",
+                LastName = "admingero",
+                IdentityNumber = "00201071653"
+            };
+            admin.PasswordHash = hasher.HashPassword(admin, "Admin@123");
+
+            var manager = new ApplicationUser
+            {
+                Id = "102",
+                UserName = "manager",
+                NormalizedUserName = "MANAGER",
+                FirstName = "manager",
+                LastName = "mangero",
+                IdentityNumber = "00201071653"
+            };
+            manager.PasswordHash = hasher.HashPassword(manager, "Manager@123");
+
+            var guest = new ApplicationUser
+            {
+                Id = "103",
+                UserName = "guest",
+                NormalizedUserName = "GUEST",
+                FirstName = "guest",
+                LastName = "guestgero",
+                IdentityNumber = "10201171653"
+            };
+            guest.PasswordHash = hasher.HashPassword(guest, "Guest@123");
+
+            builder.Entity<ApplicationUser>().HasData(admin, manager, guest);
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> { UserId = "101", RoleId = "1" }, // Admin
+                new IdentityUserRole<string> { UserId = "102", RoleId = "2" }, // Manager
+                new IdentityUserRole<string> { UserId = "103", RoleId = "3" }  // Guest
             );
         }
     }

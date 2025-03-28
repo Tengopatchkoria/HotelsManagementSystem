@@ -15,7 +15,7 @@ namespace HotelManagment.Repository.Implementations
         private readonly ApplicationDbContext _context;
         public RoomRepository(ApplicationDbContext context) : base(context)
         {
-            context = _context;
+            _context = context;
         }
 
         public async Task Update(Room entity)

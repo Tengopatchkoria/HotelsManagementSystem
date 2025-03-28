@@ -13,7 +13,7 @@ namespace HotelManagment.Models.Dtos.Rooms
         [MaxLength(50)]
         public string Name { get; set; }
         [Required]
-        public Boolean Free { get; set; }
+        public Boolean Free { get; set; } = true;
         [Required]
         public int Price { get; set; }
     }

@@ -32,7 +32,7 @@ namespace HotelManagment.Models.Entities
 
         //1X1
         [ForeignKey(nameof(Hotel))]
-        public int HotelId { get; set; }
+        public int? HotelId { get; set; }
         public Hotel Hotel { get; set; }
 
 

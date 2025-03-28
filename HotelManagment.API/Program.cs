@@ -1,3 +1,4 @@
+using HotelManagment.API.MIddleware;
 using HotelManagment.Models.Dtos.Idenitity;
 using HotelManagment.Models.Entities;
 using HotelManagment.Repository.Data;
@@ -35,6 +36,7 @@ namespace HotelManagment.API
             builder.Services.AddScoped<IGuestRepository, GuestRepository>();
             builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
             builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+            builder.Services.AddScoped<IGuestBookingRepository, GuestBookingRepository>();
 
             builder.Services.AddScoped<IHotelService, HotelService>();
             builder.Services.AddScoped<IRoomService, RoomService>();
@@ -53,7 +55,7 @@ namespace HotelManagment.API
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 3;
 
-                options.User.RequireUniqueEmail = true;
+                //options.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
@@ -92,6 +94,8 @@ namespace HotelManagment.API
 
             var app = builder.Build();
 
+            app.CreateDatabaseAutomatically();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.MapOpenApi();
             app.UseHttpsRedirection();
             app.UseAuthentication();

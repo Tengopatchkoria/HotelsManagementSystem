@@ -15,7 +15,6 @@ namespace HotelManagment.API.Controllers
 {
     [Route("api/hotels")]
     [ApiController]
-    [Authorize]
     public class HotelsController : ControllerBase
     {
         private readonly IHotelService _hotelService;
@@ -43,6 +42,7 @@ namespace HotelManagment.API.Controllers
         }
         
         [HttpGet()]
+        [Authorize]
         public async Task<IActionResult> GetAllHotels()
         {
             var result = await _hotelService.GetAllHotels();
@@ -50,7 +50,8 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         
-        [HttpPost("add")]
+        [HttpPost("hotel/add")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddHotel([FromBody] HotelsForCreatingDto model)
         {
             await _hotelService.AddHotel(model);
@@ -59,7 +60,9 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         
-        [HttpDelete("hotel/{hotelId}")]
+        [HttpDelete("hotel/delete/{hotelId}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> DeleteHotel([FromRoute] int hotelId)
         {
             await _hotelService.DeleteHotel(hotelId);
@@ -68,7 +71,8 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         
-        [HttpPut]
+        [HttpPut("hotel/update")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> UpdateHotel([FromBody] HotelsForUpdatingDto model)
         {
             await _hotelService.UpdateHotel(model);
@@ -76,28 +80,18 @@ namespace HotelManagment.API.Controllers
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 200, isSuccess: true);
             return StatusCode(response.StatusCode, response);
         }
-        
-        [HttpPost("hotel/assign-manager")]
-        public async Task<IActionResult> AssignManager([FromBody] AssignManagerDto model)
-        {
-            await _hotelService.AssignManagerToHotel(model);
-            await _hotelService.SaveHotel();
-            ApiResponse response = new(ApiResponseMessage.successMessage, model, 204, isSuccess: true);
-            return StatusCode(response.StatusCode, response);
-        }
-
-
-
 
         [HttpPost("room/add")]
-        public async Task<IActionResult> AddRoom([FromBody] RoomsForCreatingDto model)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> AddRoom([FromBody] RoomsForCreatingDto model, [FromQuery] int hotelId)
         {
-            await _roomService.AddRoomToHotel(model);
+            await _roomService.AddRoomToHotel(model, hotelId);
             await _roomService.SaveRoom();
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 201, isSuccess: true);
             return StatusCode(response.StatusCode, response);
         }
-        [HttpDelete("room/{roomId}")]
+        [HttpDelete("room/delete/{roomId}")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> DeleteRoom([FromRoute] int roomId)
         {
             await _roomService.RemoveRoom(roomId);
@@ -106,6 +100,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpPut("room/update")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> UpdateRoom([FromBody] RoomsForUpdatingDto model)
         {
             await _roomService.UpdateRoom(model);
@@ -114,6 +109,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpGet("room/filter")]
+        [Authorize]
         public async Task<IActionResult> GetFilteredRooms([FromQuery] int? hotelId, [FromQuery] bool? isAvailable, [FromQuery] decimal? minPrice, [FromQuery] decimal? maxPrice)
         {
             var rooms = await _roomService.FilterRooms(hotelId, isAvailable, minPrice, maxPrice);
@@ -124,6 +120,7 @@ namespace HotelManagment.API.Controllers
 
 
         [HttpPost("manager/add")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> AddManager([FromBody] ManagerForCreatingDto model)
         {
             await _managerService.AddManager(model);
@@ -131,7 +128,8 @@ namespace HotelManagment.API.Controllers
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 201, isSuccess: true);
             return StatusCode(response.StatusCode, response);
         }
-        [HttpDelete("manager/{managerId}")]
+        [HttpDelete("manager/delete/{managerId}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> RemoveManager([FromRoute] int managerId)
         {
             await _managerService.RemoveManager(managerId);
@@ -140,6 +138,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpPut("manager/update")]
+        [Authorize(Roles = "Manager, Admin")]
         public async Task<IActionResult> UpdateManager([FromBody] ManagerForUpdatingDto model)
         {
             await _managerService.UpdateManager(model);
@@ -158,7 +157,8 @@ namespace HotelManagment.API.Controllers
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 201, isSuccess: true);
             return StatusCode(response.StatusCode, response);
         }
-        [HttpDelete("guest/{guestId}")]
+        [HttpDelete("guest/delete/{guestId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RemoveGuest([FromRoute] int guestId)
         {
             await _guestService.RemoveGuest(guestId);
@@ -178,6 +178,7 @@ namespace HotelManagment.API.Controllers
 
 
         [HttpPost("booking/add")]
+        [Authorize (Roles = "Guest")]
         public async Task<IActionResult> Addbooking([FromBody] BookingForCreatingDto model)
         {
             await _bookingService.AddBooking(model);
@@ -185,7 +186,8 @@ namespace HotelManagment.API.Controllers
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 201, isSuccess: true);
             return StatusCode(response.StatusCode, response);
         }
-        [HttpDelete("booking/{bookingId}")]
+        [HttpDelete("booking/delete/{bookingId}")]
+        [Authorize(Roles = "Manager, Guest")]
         public async Task<IActionResult> RemoveBooking([FromRoute] int bookingId)
         {
             await _bookingService.RemoveBooking(bookingId);
@@ -194,6 +196,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpPut("booking/update")]
+        [Authorize(Roles = "Guest")]
         public async Task<IActionResult> UpdateBooking([FromBody] BookingForUpdatingDto model)
         {
             await _bookingService.UpdateBooking(model);
@@ -202,6 +205,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpGet("booking/filter")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetFilteredBookings([FromQuery] int? hotelId, [FromQuery] int? guestId, [FromQuery] int? roomId, [FromQuery] DateTime? entryDate, [FromQuery] DateTime? leaveDate)
         {
             var rooms = await _bookingService.FilterBooking(hotelId, guestId, roomId, entryDate, leaveDate);

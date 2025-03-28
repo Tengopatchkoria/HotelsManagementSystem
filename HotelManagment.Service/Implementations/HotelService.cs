@@ -45,15 +45,31 @@ namespace HotelManagment.Service.Implementations
             if (CheckHotel is not null)
                 throw new AmbigousNameException("Name Or Address Is Unavaliable");
 
-            var MappedHotel = _mapper.Map<Hotel>(hotelForCreatingDto); 
+            var manager = await _managerRepository.GetAsync(x => x.Id == hotelForCreatingDto.ManagerId);
+            if (manager == null)
+                throw new NotFoundException("Manager not found");
+            
+
+            var MappedHotel = _mapper.Map<Hotel>(hotelForCreatingDto);
             await _hotelRepository.AddAsync(MappedHotel);
+            await _hotelRepository.Save();
+            MappedHotel.ManagerList.Add(manager);
+            manager.HotelId = MappedHotel.Id;
+            await _hotelRepository.Save();
         }
 
         public async Task DeleteHotel(int HotelId)
         {
             var hotelToDelete = await _hotelRepository.GetAsync(x => x.Id == HotelId);
 
-            if(hotelToDelete.Rooms is not null)
+            List<Manager> managers = await _managerRepository.GetAllAsync(x => x.HotelId == HotelId);
+            //List<Manager> managerList = [];
+            //foreach(var manager in hotelToDelete.ManagerList)
+            //{
+            //    managerList.Add(manager);
+            //}
+
+            if (hotelToDelete.Rooms is not null)
             {
                 foreach( Room room in hotelToDelete.Rooms)
                 {
@@ -61,12 +77,17 @@ namespace HotelManagment.Service.Implementations
                         throw new DeletionNotAllowedException("One Of The Rooms Is Booked Or Active");
                 }
             }
+            foreach (var manager in managers)
+            {
+                manager.HotelId = null;
+            }
+
             _hotelRepository.Remove(hotelToDelete);
         }
 
         public async Task<List<HotelsForGettingDto>> GetAllHotels()
         {
-            var entityData = await _hotelRepository.GetAllAsync(includeProperties: "Rooms, ManagerList");
+            var entityData = await _hotelRepository.GetAllAsync(includeProperties: "Rooms,ManagerList");
             List<HotelsForGettingDto> result = new();
 
             if (entityData.Any())
@@ -88,7 +109,7 @@ namespace HotelManagment.Service.Implementations
             if (hotelId < 1)
                 throw new BadRequestException($"{hotelId} is an invalid argument");
             
-            var entityData =  await _hotelRepository.GetAsync(x => x.Id == hotelId, includeProperties: "Rooms, ManagerList");
+            var entityData =  await _hotelRepository.GetAsync(x => x.Id == hotelId, includeProperties: "Rooms,ManagerList");
 
             if(entityData is null)
                 throw new NotFoundException($"{hotelId} ");
@@ -100,25 +121,14 @@ namespace HotelManagment.Service.Implementations
 
             return result;
         }
-        public async Task UpdateHotel(HotelsForUpdatingDto hotel)
+        public async Task UpdateHotel(HotelsForUpdatingDto hotelForUpdatingDto)
         {
+            var hotel = await _hotelRepository.GetAsync(x => x.Id == hotelForUpdatingDto.Id);
             if (hotel is null)
                 throw new NotFoundException("Hotel You Want To Update Is Not In The Database");
 
-            var entityData = _mapper.Map<Hotel>(hotel);
+            var entityData = _mapper.Map<Hotel>(hotelForUpdatingDto);
             await _hotelRepository.Update(entityData);
-        }
-        public async Task AssignManagerToHotel(AssignManagerDto dto)
-        {
-            var hotel = await _hotelRepository.GetAsync(x => x.Id == dto.HotelId);
-            if (hotel == null)
-                throw new NotFoundException("Hotel not found");
-
-            var manager = await _managerRepository.GetAsync(x => x.Id == dto.ManagerId);
-            if (manager == null)
-                throw new NotFoundException("Manager not found");
-
-            hotel.ManagerList.Add(manager);
         }
         public async Task SaveHotel() => await _hotelRepository.Save();
     }

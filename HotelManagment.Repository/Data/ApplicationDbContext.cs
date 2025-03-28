@@ -20,11 +20,16 @@ namespace HotelManagment.Repository.Data
             modelBuilder.seedHotels();
             modelBuilder.seedManagers();
             modelBuilder.seedRooms();
+            modelBuilder.seedGuests();
+            modelBuilder.seedBookings();
+            modelBuilder.seedGuestBookings();
+            modelBuilder.seedRoles();
+            modelBuilder.seedUsers();
         }
 
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
-        public DbSet<HotelBooking> HotelBookings { get; set; }
+        public DbSet<GuestBooking> GuestBookings { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Manager> Managers{ get; set; }
         public DbSet<Guest> Guests { get; set; }

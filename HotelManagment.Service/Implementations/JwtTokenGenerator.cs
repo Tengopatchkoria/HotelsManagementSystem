@@ -27,7 +27,6 @@ namespace HotelManagment.Service.Implementations
             var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
             var claimList = new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.Email,applicationUser.Email),
                 new Claim(JwtRegisteredClaimNames.Sub,applicationUser.Id),
                 new Claim(JwtRegisteredClaimNames.Name,applicationUser.UserName),
                 new Claim("FirstName",applicationUser.FirstName),
@@ -41,7 +40,7 @@ namespace HotelManagment.Service.Implementations
                 Audience = _jwtOptions.Audience,
                 Issuer = _jwtOptions.Issuer,
                 Subject = new ClaimsIdentity(claimList),
-                Expires = DateTime.Now.AddMinutes(10),
+                Expires = DateTime.Now.AddMinutes(60),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
             };
 

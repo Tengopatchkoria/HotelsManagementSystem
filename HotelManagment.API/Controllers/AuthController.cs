@@ -1,4 +1,5 @@
 ﻿using HotelManagment.Models.Dtos.Idenitity;
+using HotelManagment.Service.Implementations;
 using HotelManagment.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,9 +12,12 @@ namespace HotelManagment.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly IGuestService _guestService;
+
+        public AuthController(IAuthService authService, IGuestService guestService)
         {
             _authService = authService;
+            _guestService = guestService;
         }
 
         [HttpPost("register")]
@@ -33,7 +37,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpPost("registerManager")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Admin")]
         public async Task<IActionResult> RegisterManager([FromForm] RegistrationRequestDto model)
         {
             await _authService.RegisterManager(model);
@@ -45,7 +49,7 @@ namespace HotelManagment.API.Controllers
         public async Task<IActionResult> Login([FromForm] LoginRequestDto model)
         {
             var result = await _authService.Login(model);
-            ApiResponse response = new(ApiResponseMessage.successMessage, model, 201, isSuccess: true);
+            ApiResponse response = new(ApiResponseMessage.successMessage, result, 201, isSuccess: true);
             return StatusCode(response.StatusCode, response);
         }
     }

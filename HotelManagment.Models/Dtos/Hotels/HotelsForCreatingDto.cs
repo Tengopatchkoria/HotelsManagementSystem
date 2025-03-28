@@ -24,5 +24,8 @@ namespace HotelManagment.Models.Dtos.Hotels
         [Required]
         [MaxLength(50)]
         public string Address { get; set; }
+        [Required]
+        public int ManagerId { get; set; }
+
     }
 }
