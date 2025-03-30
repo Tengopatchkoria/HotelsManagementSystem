@@ -42,7 +42,6 @@ namespace HotelManagment.API.Controllers
         }
         
         [HttpGet()]
-        [Authorize]
         public async Task<IActionResult> GetAllHotels()
         {
             var result = await _hotelService.GetAllHotels();
@@ -80,6 +79,7 @@ namespace HotelManagment.API.Controllers
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 200, isSuccess: true);
             return StatusCode(response.StatusCode, response);
         }
+
 
         [HttpPost("room/add")]
         [Authorize(Roles = "Manager")]
@@ -158,7 +158,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpDelete("guest/delete/{guestId}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> RemoveGuest([FromRoute] int guestId)
         {
             await _guestService.RemoveGuest(guestId);
@@ -178,7 +178,7 @@ namespace HotelManagment.API.Controllers
 
 
         [HttpPost("booking/add")]
-        [Authorize (Roles = "Guest")]
+        //[Authorize (Roles = "Guest")]
         public async Task<IActionResult> Addbooking([FromForm] BookingForCreatingDto model)
         {
             await _bookingService.AddBooking(model);
@@ -187,7 +187,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpDelete("booking/delete/{bookingId}")]
-        [Authorize(Roles = "Manager, Guest")]
+        //[Authorize(Roles = "Manager, Guest")]
         public async Task<IActionResult> RemoveBooking([FromRoute] int bookingId)
         {
             await _bookingService.RemoveBooking(bookingId);
@@ -196,7 +196,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpPut("booking/update")]
-        [Authorize(Roles = "Guest")]
+        //[Authorize(Roles = "Guest")]
         public async Task<IActionResult> UpdateBooking([FromForm] BookingForUpdatingDto model)
         {
             await _bookingService.UpdateBooking(model);
@@ -205,7 +205,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpGet("booking/filter")]
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetFilteredBookings([FromQuery] int? hotelId, [FromQuery] int? guestId, [FromQuery] int? roomId, [FromQuery] DateTime? entryDate, [FromQuery] DateTime? leaveDate)
         {
             var rooms = await _bookingService.FilterBooking(hotelId, guestId, roomId, entryDate, leaveDate);

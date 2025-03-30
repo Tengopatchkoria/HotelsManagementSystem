@@ -54,7 +54,7 @@ namespace HotelManagment.Service.Implementations
         {
             var RoomToDelete = await _roomRepository.GetAsync(x => x.Id == roomId);
 
-            if (!RoomToDelete.Free || RoomToDelete.GuestId != null)
+            if (!RoomToDelete.Free)
             {
                 throw new RoomIsBusyException("Room Your Trying To Delete Is Taken");
             }

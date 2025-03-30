@@ -4,6 +4,7 @@ using HotelManagment.Repository.Implementations;
 using HotelManagment.Repository.Interfaces;
 using HotelManagment.Service.Exceptions;
 using HotelManagment.Service.Interfaces;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,52 +35,66 @@ namespace HotelManagment.Service.Implementations
             if (room == null)
                 throw new NotFoundException("Room not found");
 
-            if (!room.Free)
-                throw new ConflictException("Room is already booked");
+            var overlappingBookings = await _bookingRepository.GetOverlappingBookingsAsync(
+                room.Id, bookingForCreatingDto.EntryDate, bookingForCreatingDto.LeaveDate);
+
+            if (overlappingBookings.Any())
+                throw new ConflictException("The booking dates overlap with another booking");
 
             if (bookingForCreatingDto.EntryDate < DateTime.UtcNow.Date)
                 throw new ValidationException("Check-in date must be today or in the future");
 
             if (bookingForCreatingDto.LeaveDate <= bookingForCreatingDto.EntryDate)
                 throw new ValidationException("Check-out date must be after check-in date");
+            
+            var guest = await _guestRepository.GetAsync(x => x.Id == bookingForCreatingDto.GuestId);
+            if (guest == null)
+                throw new NotFoundException($"Guest with ID {guest.Id} not found");
 
             var booking = new Booking
             {
                 RoomId = bookingForCreatingDto.RoomId,
+                Room = room,
                 EntryDate = bookingForCreatingDto.EntryDate,
                 LeaveDate = bookingForCreatingDto.LeaveDate,
             };
+            await _bookingRepository.AddAsync(booking);
+            await _bookingRepository.Save();
 
-            foreach (var guestId in bookingForCreatingDto.GuestIds)
-            {
-                var guest = await _guestRepository.GetAsync(x => x.Id == guestId);
-                if (guest == null)
-                    throw new NotFoundException($"Guest with ID {guestId} not found");
 
-                var guestBooking = new GuestBooking { GuestId = guestId, BookingId = booking.Id };
-                await _guestBookingRepository.AddAsync(guestBooking);
-            }
+            var guestBooking = new GuestBooking { GuestId = guest.Id, BookingId = booking.Id, Guest = guest, Booking = booking};
+            await _guestBookingRepository.AddAsync(guestBooking);
+            await _guestBookingRepository.Save();
+
+            //booking.GuestBookings.Add(guestBooking);
+            //await _bookingRepository.Update(booking);
+            //await _bookingRepository.Save();
+
+            //guest.GuestBookings.Add(guestBooking);
+            //await _guestRepository.Update(guest);
+            //await _guestRepository.Save();
 
             room.Free = false;
+            //room.Bookings.Add(booking);
             await _roomRepository.Update(room);
+            await _roomRepository.Save();
 
-            await _bookingRepository.AddAsync(booking);
         }
 
         public async Task<List<Booking>> FilterBooking(int? hotelId, int? guestId, int? roomId, DateTime? entryDate, DateTime? leaveDate)
         {
             if (hotelId.HasValue)
-                return await _bookingRepository.GetAllAsync(x => x.Room.HotelId == hotelId, includeProperties: "Room, GuestBookings");
+                return await _bookingRepository.GetAllAsync(x => x.Room.HotelId == hotelId, includeProperties: "Room,GuestBookings");
             if (guestId.HasValue)
-                return await _bookingRepository.GetAllAsync(x => x.GuestBookings.FirstOrDefault(x => x.GuestId == guestId).GuestId == guestId, includeProperties: "Room, GuestBookings");
+                return await _bookingRepository.GetAllAsync(x => x.GuestBookings.FirstOrDefault(x => x.GuestId == guestId).GuestId == guestId, includeProperties: "Room,GuestBookings");
             if (roomId.HasValue)
-                return await _bookingRepository.GetAllAsync(x => x.RoomId == roomId, includeProperties: "Room, GuestBookings");
+                return await _bookingRepository.GetAllAsync(x => x.RoomId == roomId, includeProperties: "Room,GuestBookings");
             if (entryDate.HasValue)
-                return await _bookingRepository.GetAllAsync(x => x.EntryDate == entryDate, includeProperties: "Room, GuestBookings");
+                return await _bookingRepository.GetAllAsync(x => x.EntryDate == entryDate, includeProperties: "Room,GuestBookings");
             if (leaveDate.HasValue)
-                return await _bookingRepository.GetAllAsync(x => x.LeaveDate == leaveDate, includeProperties: "Room, GuestBookings");
+                return await _bookingRepository.GetAllAsync(x => x.LeaveDate == leaveDate, includeProperties: "Room,GuestBookings");
 
-            return await _bookingRepository.GetAllAsync(includeProperties: "Room, GuestBookings");            
+            return await _bookingRepository.GetAllAsync(includeProperties: "Room,GuestBookings");            
         }
 
         public async Task RemoveBooking(int bookingId)
@@ -92,13 +107,27 @@ namespace HotelManagment.Service.Implementations
             if (room == null)
                 throw new NotFoundException("Room not found");
 
-            booking.GuestBookings.Clear();
-            await _bookingRepository.Update(booking);
+            var guest = await _guestRepository.GetAsync(x => x.GuestBookings.FirstOrDefault(x => x.BookingId == bookingId).BookingId == bookingId );
 
-            _bookingRepository.Remove(booking);
+            var guestBooking = await _guestBookingRepository.GetAsync(x => x.BookingId == bookingId);
             
+            //guest.GuestBookings.Remove(guestBooking);
+            //await _guestRepository.Update(guest);
+            //await _guestRepository.Save();
+
+            _guestBookingRepository.Remove(guestBooking);
+            await _guestBookingRepository.Save();
+
+            //booking.GuestBookings.Clear();
+            //await _bookingRepository.Update(booking);
+            _bookingRepository.Remove(booking);
+            await _bookingRepository.Save();
+
             room.Free = true;
+            //room.Bookings.Remove(booking);
             await _roomRepository.Update(room);
+            await _roomRepository.Save();
+
         }
 
         public Task SaveBooking() => _bookingRepository.Save();

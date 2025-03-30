@@ -23,10 +23,6 @@ namespace HotelManagment.Models.Entities
         
         public Hotel Hotel { get; set; }
 
-        //1X1
-        public int? GuestId { get; set; }
-        public Guest Guest { get; set; }
-
         //1XM
         public List<Booking> Bookings { get; set; }
 

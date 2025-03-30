@@ -10,8 +10,10 @@ namespace HotelManagment.Models.Dtos.Booking
 {
     public class BookingForCreatingDto
     {
-        public List<int> GuestIds { get; set; }
+        public int GuestId { get; set; }
+        
         public int RoomId { get; set; }
+
         [Required]
         [Column(TypeName = "datetime2")]
         public DateTime EntryDate { get; set; }

@@ -24,10 +24,7 @@ namespace HotelManagment.Models.Entities
         [Column(TypeName = "char(50)")]
         public string PhoneNumber { get; set; }
 
-        //1X1
-        public Room Room { get; set; }
-
-        //1X1
+        //1XM
         public List<GuestBooking> GuestBookings { get; set; }
     }
 }
