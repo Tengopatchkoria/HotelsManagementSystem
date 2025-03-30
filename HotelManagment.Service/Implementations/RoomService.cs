@@ -28,13 +28,13 @@ namespace HotelManagment.Service.Implementations
             _mapper = mapper;
         }
 
-        public async Task AddRoomToHotel(RoomsForCreatingDto roomsForCreatingDto, int hotelId)
+        public async Task AddRoomToHotel(RoomsForCreatingDto roomsForCreatingDto)
         {
             if (roomsForCreatingDto is null)
                 throw new BadRequestException("Invalid Argument");
             else if (roomsForCreatingDto.Price <= 0)
                 throw new InvalidPriceException("Room Price Cannot Be Negative Or 0");
-            else if(await _hotelRepository.GetAsync(x=> x.Id == hotelId) == null)
+            else if(await _hotelRepository.GetAsync(x=> x.Id == roomsForCreatingDto.HotelId) == null)
                 throw new NotFoundException("Hotel Doesnt Exist");
             
 
@@ -45,9 +45,8 @@ namespace HotelManagment.Service.Implementations
                 throw new AmbigousNameException("Name Or Address Is Unavaliable");
 
             var MappedRoom = _mapper.Map<Room>(roomsForCreatingDto);
-            MappedRoom.HotelId = hotelId;
-            MappedRoom.Hotel = await _hotelRepository.GetAsync(x => x.Id == hotelId);
             await _roomRepository.AddAsync(MappedRoom);
+            await _roomRepository.Save();
         }
 
         public async Task RemoveRoom(int roomId)

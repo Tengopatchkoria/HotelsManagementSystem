@@ -16,5 +16,7 @@ namespace HotelManagment.Models.Dtos.Rooms
         public Boolean Free { get; set; } = true;
         [Required]
         public int Price { get; set; }
+        [Required]
+        public int HotelId { get; set; }
     }
 }

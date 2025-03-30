@@ -23,7 +23,6 @@ namespace HotelManagment.Models.Entities
         public string Address { get; set; }
 
         //1X1
-        [ForeignKey(nameof(Manager))]
         public int? ManagerId { get; set; }
         public Manager Manager { get; set; }
 

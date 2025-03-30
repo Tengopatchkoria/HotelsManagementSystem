@@ -48,6 +48,8 @@ namespace HotelManagment.Service.Implementations
             var manager = await _managerRepository.GetAsync(x => x.Id == hotelForCreatingDto.ManagerId);
             if (manager == null)
                 throw new NotFoundException("Manager not found");
+            if (manager.HotelId != null)
+                throw new ManagerTakenException("Manager is already assigned to hotel");
             
 
             var MappedHotel = _mapper.Map<Hotel>(hotelForCreatingDto);
@@ -79,6 +81,7 @@ namespace HotelManagment.Service.Implementations
             manager.Hotel = null;
 
             _hotelRepository.Remove(hotelToDelete);
+            await _hotelRepository.Save();
         }
 
         public async Task<List<HotelsForGettingDto>> GetAllHotels()

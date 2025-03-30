@@ -10,7 +10,7 @@ namespace HotelManagment.Service.Interfaces
 {
     public interface IRoomService
     {
-        Task AddRoomToHotel(RoomsForCreatingDto roomsForCreatingDto, int hotelId);
+        Task AddRoomToHotel(RoomsForCreatingDto roomsForCreatingDto);
         Task UpdateRoom(RoomsForUpdatingDto roomsForUpdatingDto);
         Task RemoveRoom(int roomId);
         Task<List<Room>> FilterRooms(int? hotelId, bool? isAvailable, decimal? minPrice, decimal? maxPrice);

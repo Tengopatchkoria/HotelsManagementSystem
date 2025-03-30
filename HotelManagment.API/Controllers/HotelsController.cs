@@ -50,7 +50,7 @@ namespace HotelManagment.API.Controllers
         }
         
         [HttpPost("hotel/add")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddHotel([FromForm] HotelsForCreatingDto model)
         {
             await _hotelService.AddHotel(model);
@@ -60,7 +60,7 @@ namespace HotelManagment.API.Controllers
         }
         
         [HttpDelete("hotel/delete/{hotelId}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> DeleteHotel([FromRoute] int hotelId)
         {
@@ -83,9 +83,9 @@ namespace HotelManagment.API.Controllers
 
         [HttpPost("room/add")]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> AddRoom([FromForm] RoomsForCreatingDto model, [FromQuery] int hotelId)
+        public async Task<IActionResult> AddRoom([FromForm] RoomsForCreatingDto model)
         {
-            await _roomService.AddRoomToHotel(model, hotelId);
+            await _roomService.AddRoomToHotel(model);
             await _roomService.SaveRoom();
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 201, isSuccess: true);
             return StatusCode(response.StatusCode, response);

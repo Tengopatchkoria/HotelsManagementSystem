@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HotelManagment.Models.Dtos.Manager;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,6 +27,5 @@ namespace HotelManagment.Models.Dtos.Hotels
         public string Address { get; set; }
         [Required]
         public int ManagerId { get; set; }
-
     }
 }
