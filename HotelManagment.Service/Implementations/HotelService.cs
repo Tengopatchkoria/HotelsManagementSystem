@@ -53,6 +53,12 @@ namespace HotelManagment.Service.Implementations
             var MappedHotel = _mapper.Map<Hotel>(hotelForCreatingDto);
             await _hotelRepository.AddAsync(MappedHotel);
             await _hotelRepository.Save();
+
+
+            manager.HotelId = MappedHotel.Id;
+            manager.Hotel = MappedHotel;
+            await _managerRepository.Update(manager);
+            await _managerRepository.Save();
         }
 
         public async Task DeleteHotel(int HotelId)

@@ -52,7 +52,7 @@ namespace HotelManagment.API.Controllers
         
         [HttpPost("hotel/add")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddHotel([FromBody] HotelsForCreatingDto model)
+        public async Task<IActionResult> AddHotel([FromForm] HotelsForCreatingDto model)
         {
             await _hotelService.AddHotel(model);
             await _hotelService.SaveHotel();
@@ -73,7 +73,7 @@ namespace HotelManagment.API.Controllers
         
         [HttpPut("hotel/update")]
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<IActionResult> UpdateHotel([FromBody] HotelsForUpdatingDto model)
+        public async Task<IActionResult> UpdateHotel([FromForm] HotelsForUpdatingDto model)
         {
             await _hotelService.UpdateHotel(model);
             await _hotelService.SaveHotel();
@@ -83,7 +83,7 @@ namespace HotelManagment.API.Controllers
 
         [HttpPost("room/add")]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> AddRoom([FromBody] RoomsForCreatingDto model, [FromQuery] int hotelId)
+        public async Task<IActionResult> AddRoom([FromForm] RoomsForCreatingDto model, [FromQuery] int hotelId)
         {
             await _roomService.AddRoomToHotel(model, hotelId);
             await _roomService.SaveRoom();
@@ -101,7 +101,7 @@ namespace HotelManagment.API.Controllers
         }
         [HttpPut("room/update")]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> UpdateRoom([FromBody] RoomsForUpdatingDto model)
+        public async Task<IActionResult> UpdateRoom([FromForm] RoomsForUpdatingDto model)
         {
             await _roomService.UpdateRoom(model);
             await _roomService.SaveRoom();
@@ -121,7 +121,7 @@ namespace HotelManagment.API.Controllers
 
         [HttpPost("manager/add")]
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<IActionResult> AddManager([FromBody] ManagerForCreatingDto model)
+        public async Task<IActionResult> AddManager([FromForm] ManagerForCreatingDto model)
         {
             await _managerService.AddManager(model);
             await _managerService.SaveManager();
@@ -139,7 +139,7 @@ namespace HotelManagment.API.Controllers
         }
         [HttpPut("manager/update")]
         [Authorize(Roles = "Manager, Admin")]
-        public async Task<IActionResult> UpdateManager([FromBody] ManagerForUpdatingDto model)
+        public async Task<IActionResult> UpdateManager([FromForm] ManagerForUpdatingDto model)
         {
             await _managerService.UpdateManager(model);
             await _managerService.SaveManager();
@@ -150,7 +150,7 @@ namespace HotelManagment.API.Controllers
 
 
         [HttpPost("guest/add")]
-        public async Task<IActionResult> AddGuest([FromBody] GuestForCreatingDto model)
+        public async Task<IActionResult> AddGuest([FromForm] GuestForCreatingDto model)
         {
             await _guestService.AddGuest(model);
             await _guestService.SaveGuest();
@@ -167,7 +167,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpPut("guest/update")]
-        public async Task<IActionResult> UpdateGuest([FromBody] GuestForUpdatingDto model)
+        public async Task<IActionResult> UpdateGuest([FromForm] GuestForUpdatingDto model)
         {
             await _guestService.UpdateGuest(model);
             await _guestService.SaveGuest();
@@ -179,7 +179,7 @@ namespace HotelManagment.API.Controllers
 
         [HttpPost("booking/add")]
         [Authorize (Roles = "Guest")]
-        public async Task<IActionResult> Addbooking([FromBody] BookingForCreatingDto model)
+        public async Task<IActionResult> Addbooking([FromForm] BookingForCreatingDto model)
         {
             await _bookingService.AddBooking(model);
             await _bookingService.SaveBooking();
@@ -197,7 +197,7 @@ namespace HotelManagment.API.Controllers
         }
         [HttpPut("booking/update")]
         [Authorize(Roles = "Guest")]
-        public async Task<IActionResult> UpdateBooking([FromBody] BookingForUpdatingDto model)
+        public async Task<IActionResult> UpdateBooking([FromForm] BookingForUpdatingDto model)
         {
             await _bookingService.UpdateBooking(model);
             await _bookingService.SaveBooking();
