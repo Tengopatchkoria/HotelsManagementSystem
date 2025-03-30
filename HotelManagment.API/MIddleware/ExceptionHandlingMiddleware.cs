@@ -29,6 +29,12 @@ namespace HotelManagment.API.MIddleware
 
             switch (ex)
             {
+                case InvalidPasswordException:
+                    response.StatusCode = Convert.ToInt32(HttpStatusCode.MethodNotAllowed);
+                    response.Message = ex.Message;
+                    response.IsSuccess = false;
+                    response.Result = null;
+                    break;
                 case RoomIsBusyException:
                     response.StatusCode = Convert.ToInt32(HttpStatusCode.MethodNotAllowed);
                     response.Message = ex.Message;

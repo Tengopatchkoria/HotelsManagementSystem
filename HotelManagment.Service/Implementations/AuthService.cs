@@ -51,7 +51,7 @@ namespace HotelManagment.Service.Implementations
                 var isValid = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 
                 if (!isValid)
-                    return new LoginResponseDto() { Token = string.Empty };
+                    throw new InvalidPasswordException("Password Is Invalid");
 
                 var roles = await _userManager.GetRolesAsync(user);
                 var token = _jwtTokenGenerator.GenerateToken(user, roles);

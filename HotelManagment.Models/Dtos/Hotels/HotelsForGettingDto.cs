@@ -17,7 +17,7 @@ namespace HotelManagment.Models.Dtos.Hotels
         public string Country { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        public List<ManagerForGettingDto> ManagerList { get; set; }
+        public ManagerForGettingDto Manager{ get; set; }
         public List<RoomsForGettingDto> Rooms { get; set; }
 
     }

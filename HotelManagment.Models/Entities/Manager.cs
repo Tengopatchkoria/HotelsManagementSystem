@@ -31,7 +31,6 @@ namespace HotelManagment.Models.Entities
         public string PhoneNumber { get; set; }
 
         //1X1
-        [ForeignKey(nameof(Hotel))]
         public int? HotelId { get; set; }
         public Hotel Hotel { get; set; }
 

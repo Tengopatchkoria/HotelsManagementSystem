@@ -51,9 +51,7 @@ namespace HotelManagment.Service.Implementations
             var hotel = await _hotelRepository.GetAsync(x => x.Id == managerToDelete.HotelId);
             if (hotel != null)
             {
-                if (hotel.ManagerList.Count <= 1)
-                    throw new DeletionNotAllowedException("Cannot delete manager. The hotel must have at least one manager.");
-                hotel.ManagerList.Remove(managerToDelete);
+                throw new DeletionNotAllowedException("Cannot delete manager. The hotel must have at least one manager.");
             }
             _managerRepository.Remove(managerToDelete);
         }

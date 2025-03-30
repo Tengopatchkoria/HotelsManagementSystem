@@ -31,7 +31,8 @@ namespace HotelManagment.Repository.Data
                 Rating = 5, 
                 Country = "Georgia", 
                 City = "Tbilisi", 
-                Address = "Rustaveli Avenue 12" 
+                Address = "Rustaveli Avenue 12",
+                ManagerId = 1
             },
             new Hotel 
             { 
@@ -40,7 +41,8 @@ namespace HotelManagment.Repository.Data
                 Rating = 4, 
                 Country = "Georgia", 
                 City = "Batumi", 
-                Address = "Black Sea Blvd 5"
+                Address = "Black Sea Blvd 5",
+                ManagerId = 2
             });
         }
         public static void seedManagers(this ModelBuilder modelBuilder)

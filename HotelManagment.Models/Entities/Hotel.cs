@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace HotelManagment.Models.Entities
@@ -21,8 +22,10 @@ namespace HotelManagment.Models.Entities
         [Required]
         public string Address { get; set; }
 
-        //1XM
-        public List<Manager> ManagerList { get; set; } = [];
+        //1X1
+        [ForeignKey(nameof(Manager))]
+        public int? ManagerId { get; set; }
+        public Manager Manager { get; set; }
 
         //1XM
         [JsonIgnore]
