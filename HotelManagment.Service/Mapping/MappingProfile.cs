@@ -19,7 +19,9 @@ namespace HotelManagment.Service.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Hotel, HotelsForGettingDto>();
+            CreateMap<Hotel, HotelsForGettingDto>()
+               .ForMember(dest => dest.Manager, opt => opt.MapFrom(src => src.Manager))
+               .ForMember(dest => dest.Rooms, opt => opt.MapFrom(src => src.Rooms));
             CreateMap<Room, RoomsForGettingDto>();
             CreateMap<Manager, ManagerForGettingDto>();
 

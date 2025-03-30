@@ -65,7 +65,7 @@ namespace HotelManagment.Service.Implementations
             }
         }
 
-        public async Task Register(RegistrationRequestDto registrationRequestDto)
+        public async Task RegisterGuest(GuestRegistrationRequestDto registrationRequestDto)
         {
             var user = _mapper.Map<ApplicationUser>(registrationRequestDto);
             var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);

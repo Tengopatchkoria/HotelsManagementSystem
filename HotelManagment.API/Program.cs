@@ -94,7 +94,6 @@ namespace HotelManagment.API
 
             var app = builder.Build();
 
-            //app.CreateDatabaseAutomatically();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.MapOpenApi();
             app.UseHttpsRedirection();
