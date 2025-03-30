@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace HotelManagment.Models.Entities
@@ -21,6 +22,7 @@ namespace HotelManagment.Models.Entities
 
         [ForeignKey(nameof(Booking))]
         public int BookingId { get; set; }
+        [JsonIgnore]
         public Booking Booking { get; set; }
     }
 }

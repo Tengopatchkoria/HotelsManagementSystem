@@ -24,6 +24,7 @@ namespace HotelManagment.Models.Entities
         public Hotel Hotel { get; set; }
 
         //1XM
+        [JsonIgnore]
         public List<Booking> Bookings { get; set; }
 
     }
