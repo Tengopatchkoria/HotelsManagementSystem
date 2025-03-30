@@ -2,6 +2,7 @@
 using HotelManagment.Models.Dtos.Guest;
 using HotelManagment.Models.Dtos.Manager;
 using HotelManagment.Models.Entities;
+using HotelManagment.Repository.Data;
 using HotelManagment.Repository.Implementations;
 using HotelManagment.Repository.Interfaces;
 using HotelManagment.Service.Exceptions;
@@ -18,11 +19,13 @@ namespace HotelManagment.Service.Implementations
     public class GuestService : IGuestService
     {
         private readonly IGuestRepository _guestRepository;
+        private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public GuestService(IMapper mapper, IGuestRepository guestRepository)
+        public GuestService(IMapper mapper, IGuestRepository guestRepository, ApplicationDbContext context)
         {
             _guestRepository = guestRepository;
             _mapper = mapper;
+            _context = context;
         }
         public async Task AddGuest(GuestForCreatingDto guestForCreatingDto)
         {
@@ -43,7 +46,9 @@ namespace HotelManagment.Service.Implementations
         public async Task RemoveGuest(int guestId)
         {
             var GuestToDelete = await _guestRepository.GetAsync(x => x.Id == guestId);
-            
+            var userToRemove = _context.Users.FirstOrDefault(x => x.UserName == GuestToDelete.IdentityNumber);
+            var UserRoleToRemove = _context.UserRoles.FirstOrDefault(x => x.UserId == userToRemove.Id);
+
             if(GuestToDelete is null)
             {
                 throw new NotFoundException("Guest not found");
@@ -53,6 +58,9 @@ namespace HotelManagment.Service.Implementations
                 throw new DeletionNotAllowedException("Cannot Remove Guest.They Have Active Booking");
 
             _guestRepository.Remove(GuestToDelete);
+            _context.UserRoles.Remove(UserRoleToRemove);
+            _context.Users.Remove(userToRemove);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateGuest(GuestForUpdatingDto guestForUpdatingDto)

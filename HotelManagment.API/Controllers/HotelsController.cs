@@ -158,7 +158,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpDelete("guest/delete/{guestId}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> RemoveGuest([FromRoute] int guestId)
         {
             await _guestService.RemoveGuest(guestId);

@@ -21,9 +21,9 @@ namespace HotelManagment.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegistrationRequestDto model)
+        public async Task<IActionResult> Register([FromForm] GuestRegistrationRequestDto model)
         {
-            await _authService.Register(model);
+            await _authService.RegisterGuest(model);
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 201, isSuccess: true);
             return StatusCode(response.StatusCode, response);
         }

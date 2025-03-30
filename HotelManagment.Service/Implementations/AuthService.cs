@@ -2,6 +2,7 @@
 using HotelManagment.Models.Dtos.Idenitity;
 using HotelManagment.Models.Entities;
 using HotelManagment.Repository.Data;
+using HotelManagment.Repository.Interfaces;
 using HotelManagment.Service.Exceptions;
 using HotelManagment.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,7 @@ namespace HotelManagment.Service.Implementations
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IGuestRepository _guestRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IMapper _mapper;
         private const string _adminRole = "Admin";
@@ -31,7 +33,8 @@ namespace HotelManagment.Service.Implementations
                 UserManager<ApplicationUser> userManager,
                 RoleManager<IdentityRole> roleManager,
                 IJwtTokenGenerator jwtTokenGenerator,
-                IMapper mapper
+                IMapper mapper,
+                IGuestRepository guestRepository
             )
         {
             _context = context;
@@ -39,6 +42,7 @@ namespace HotelManagment.Service.Implementations
             _roleManager = roleManager;
             _jwtTokenGenerator = jwtTokenGenerator;
             _mapper = mapper;
+            _guestRepository = guestRepository;
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
@@ -65,15 +69,24 @@ namespace HotelManagment.Service.Implementations
             }
         }
 
-        public async Task RegisterGuest(GuestRegistrationRequestDto registrationRequestDto)
+        public async Task RegisterGuest(GuestRegistrationRequestDto guestRegistrationRequestDto)
         {
-            var user = _mapper.Map<ApplicationUser>(registrationRequestDto);
-            var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);
+            var user = _mapper.Map<ApplicationUser>(guestRegistrationRequestDto);
+            var result = await _userManager.CreateAsync(user, guestRegistrationRequestDto.Password);
 
+            var GuestEntity = new Guest()
+            {
+                IdentityNumber = guestRegistrationRequestDto.IdentityNumber,
+                PhoneNumber = guestRegistrationRequestDto.PhoneNumber,
+                FirstName = guestRegistrationRequestDto.FirstName,
+                LastName = guestRegistrationRequestDto.LastName,
+                GuestBookings = []
+            };
+            
             if (result.Succeeded)
             {
                 var userToReturn = await _context.ApplicationUsers
-                    .FirstOrDefaultAsync(x => x.IdentityNumber.ToLower().Trim() == registrationRequestDto.IdentityNumber.ToLower().Trim());
+                    .FirstOrDefaultAsync(x => x.IdentityNumber.ToLower().Trim() == guestRegistrationRequestDto.IdentityNumber.ToLower().Trim());
 
                 if (userToReturn is not null)
                 {
@@ -81,6 +94,8 @@ namespace HotelManagment.Service.Implementations
                         await _roleManager.CreateAsync(new IdentityRole(_guestRole));
 
                     await _userManager.AddToRoleAsync(userToReturn, _guestRole);
+                    await _guestRepository.AddAsync(GuestEntity);
+                    await _guestRepository.Save();
                 }
             }
             else
