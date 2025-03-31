@@ -34,6 +34,7 @@ namespace HotelManagment.API.Controllers
 
 
         [HttpGet("hotel/{id}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> GetHotel([FromRoute] int id)
         {
             var result = await _hotelService.GetHotelById(id);
@@ -42,6 +43,7 @@ namespace HotelManagment.API.Controllers
         }
         
         [HttpGet()]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> GetAllHotels()
         {
             var result = await _hotelService.GetAllHotels();

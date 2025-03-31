@@ -76,7 +76,6 @@ namespace HotelManagment.Repository.Data
             new Room { Id = 3, Name = "Ocean View Room", Free = true, Price = 200, HotelId = 2 }
         );
         }
-
         public static void seedGuests(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Guest>().HasData(
@@ -84,7 +83,6 @@ namespace HotelManagment.Repository.Data
            new Guest { Id = 2, FirstName = "Alice", LastName = "Smith", IdentityNumber = "98765432109", PhoneNumber = "+995599222222" }
            );
         }
-
         public static void seedBookings(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Booking>().HasData(
@@ -111,7 +109,6 @@ namespace HotelManagment.Repository.Data
                 new GuestBooking { Id = 2, GuestId = 2, BookingId = 2 }
             );
         }
-
         public static void seedRoles(this ModelBuilder builder)
         {
             builder.Entity<IdentityRole>().HasData(

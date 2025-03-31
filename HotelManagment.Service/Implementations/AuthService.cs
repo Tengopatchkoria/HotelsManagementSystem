@@ -115,7 +115,6 @@ namespace HotelManagment.Service.Implementations
                 throw new InvalidOperationException(result.Errors.FirstOrDefault().Description);
             }
         }
-
         public async Task RegisterAdmin(RegistrationRequestDto registrationRequestDto)
         {
             var user = _mapper.Map<ApplicationUser>(registrationRequestDto);
@@ -139,7 +138,6 @@ namespace HotelManagment.Service.Implementations
                 throw new InvalidOperationException(result.Errors.FirstOrDefault().Description);
             }
         }
-
         public async Task RegisterManager(ManagerRegistrationRequestDto managerRegistrationRequestDto)
         {
             var user = _mapper.Map<ApplicationUser>(managerRegistrationRequestDto);
