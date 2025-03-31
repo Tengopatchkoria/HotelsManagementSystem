@@ -66,16 +66,7 @@ namespace HotelManagment.Service.Implementations
             await _guestBookingRepository.AddAsync(guestBooking);
             await _guestBookingRepository.Save();
 
-            //booking.GuestBookings.Add(guestBooking);
-            //await _bookingRepository.Update(booking);
-            //await _bookingRepository.Save();
-
-            //guest.GuestBookings.Add(guestBooking);
-            //await _guestRepository.Update(guest);
-            //await _guestRepository.Save();
-
             room.Free = false;
-            //room.Bookings.Add(booking);
             await _roomRepository.Update(room);
             await _roomRepository.Save();
 
@@ -111,20 +102,13 @@ namespace HotelManagment.Service.Implementations
 
             var guestBooking = await _guestBookingRepository.GetAsync(x => x.BookingId == bookingId);
             
-            //guest.GuestBookings.Remove(guestBooking);
-            //await _guestRepository.Update(guest);
-            //await _guestRepository.Save();
-
             _guestBookingRepository.Remove(guestBooking);
             await _guestBookingRepository.Save();
 
-            //booking.GuestBookings.Clear();
-            //await _bookingRepository.Update(booking);
             _bookingRepository.Remove(booking);
             await _bookingRepository.Save();
 
             room.Free = true;
-            //room.Bookings.Remove(booking);
             await _roomRepository.Update(room);
             await _roomRepository.Save();
 

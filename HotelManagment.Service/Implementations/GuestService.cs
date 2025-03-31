@@ -73,7 +73,7 @@ namespace HotelManagment.Service.Implementations
                x.PhoneNumber.ToLower().Trim() == guestForUpdatingDto.PhoneNumber.ToLower().Trim() && x.Id != guestForUpdatingDto.Id);
 
             if (CheckGuest is not null)
-                throw new UpdateNotAllowedException("IdentityNumber Or PhoneNUmber Is Not Avaliable");
+                throw new UpdateNotAllowedException("IdentityNumber Or PhoneNumber Is Not Avaliable");
 
             var entityData = _mapper.Map<Guest>(guestForUpdatingDto);
             var userToUpdate = _context.Users.FirstOrDefault(x => x.UserName == entityData.IdentityNumber);

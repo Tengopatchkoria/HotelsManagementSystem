@@ -62,7 +62,6 @@ namespace HotelManagment.Service.Implementations
             await _managerRepository.Update(manager);
             await _managerRepository.Save();
         }
-
         public async Task DeleteHotel(int HotelId)
         {
             var hotelToDelete = await _hotelRepository.GetAsync(x => x.Id == HotelId);
@@ -83,7 +82,6 @@ namespace HotelManagment.Service.Implementations
             _hotelRepository.Remove(hotelToDelete);
             await _hotelRepository.Save();
         }
-
         public async Task<List<HotelsForGettingDto>> GetAllHotels()
         {
             var entityData = await _hotelRepository.GetAllAsync(includeProperties: "Rooms,Manager");
@@ -100,7 +98,6 @@ namespace HotelManagment.Service.Implementations
                 throw new NotFoundException($"Hotels not found");
             }
         }
-
         public async Task<HotelsForGettingDto> GetHotelById(int hotelId)
         {
             HotelsForGettingDto result = new();
@@ -130,33 +127,5 @@ namespace HotelManagment.Service.Implementations
             await _hotelRepository.Update(entityData);
         }
         public async Task SaveHotel() => await _hotelRepository.Save();
-        public async Task AssignManagerToHotel(int HotelId, int ManagerId)
-        {
-            var hotel = await _hotelRepository.GetAsync(x => x.Id == HotelId);
-            if (hotel == null)
-                throw new NotFoundException("Hotel not found");
-
-            var manager = await _managerRepository.GetAsync(x => x.Id == ManagerId);
-            if (manager == null)
-                throw new NotFoundException("Manager not found");
-
-            // Check if the hotel already has a manager
-            if (hotel.Manager is not null)
-                throw new ConflictException("This hotel already has a manager assigned.");
-
-            // Check if the manager is already assigned to another hotel
-            if (manager.HotelId is not null)
-                throw new ConflictException("This manager is already assigned to another hotel.");
-
-            // Assign the manager to the hotel
-            hotel.Manager = manager;
-            manager.HotelId = hotel.Id;
-            manager.Hotel = hotel;
-
-            await _hotelRepository.Update(hotel);
-            await _hotelRepository.Save();
-            await _managerRepository.Update(manager);
-            await _managerRepository.Save();
-        }
     }
 }
