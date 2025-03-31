@@ -68,6 +68,13 @@ namespace HotelManagment.Service.Implementations
             if (guestForUpdatingDto is null)
                 throw new NotFoundException("Guest You Want To Update Does Not Exist");
 
+            var CheckGuest = await _guestRepository.GetAsync
+               (x => x.IdentityNumber.ToLower().Trim() == guestForUpdatingDto.IdentityNumber.ToLower().Trim() && x.Id != guestForUpdatingDto.Id ||
+               x.PhoneNumber.ToLower().Trim() == guestForUpdatingDto.PhoneNumber.ToLower().Trim() && x.Id != guestForUpdatingDto.Id);
+
+            if (CheckGuest is not null)
+                throw new UpdateNotAllowedException("IdentityNumber Or PhoneNUmber Is Not Avaliable");
+
             var entityData = _mapper.Map<Guest>(guestForUpdatingDto);
             var userToUpdate = _context.Users.FirstOrDefault(x => x.UserName == entityData.IdentityNumber);
 
@@ -75,6 +82,8 @@ namespace HotelManagment.Service.Implementations
             userToUpdate.LastName = guestForUpdatingDto.LastName;
             userToUpdate.PhoneNumber = guestForUpdatingDto.PhoneNumber;
             userToUpdate.IdentityNumber = guestForUpdatingDto.IdentityNumber;
+            userToUpdate.UserName = guestForUpdatingDto.IdentityNumber;
+            userToUpdate.NormalizedUserName = guestForUpdatingDto.IdentityNumber;
 
 
             await _guestRepository.Update(entityData);
