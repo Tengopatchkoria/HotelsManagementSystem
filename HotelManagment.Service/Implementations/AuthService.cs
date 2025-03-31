@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HotelManagment.Models.Dtos.Guest;
 using HotelManagment.Models.Dtos.Idenitity;
 using HotelManagment.Models.Entities;
 using HotelManagment.Repository.Data;
@@ -82,7 +83,14 @@ namespace HotelManagment.Service.Implementations
                 LastName = guestRegistrationRequestDto.LastName,
                 GuestBookings = []
             };
-            
+
+            var CheckGuest = await _guestRepository.GetAsync
+                (x => x.IdentityNumber.ToLower().Trim() == guestRegistrationRequestDto.IdentityNumber.ToLower().Trim() &&
+                x.PhoneNumber.ToLower().Trim() == guestRegistrationRequestDto.PhoneNumber.ToLower().Trim());
+
+            if (CheckGuest is not null)
+                throw new AmbigousNameException("Guest Already Registered");
+
             if (result.Succeeded)
             {
                 var userToReturn = await _context.ApplicationUsers

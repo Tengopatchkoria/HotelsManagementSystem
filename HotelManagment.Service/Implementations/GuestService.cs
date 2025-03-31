@@ -69,7 +69,17 @@ namespace HotelManagment.Service.Implementations
                 throw new NotFoundException("Guest You Want To Update Does Not Exist");
 
             var entityData = _mapper.Map<Guest>(guestForUpdatingDto);
+            var userToUpdate = _context.Users.FirstOrDefault(x => x.UserName == entityData.IdentityNumber);
+
+            userToUpdate.FirstName = guestForUpdatingDto.FirstName;
+            userToUpdate.LastName = guestForUpdatingDto.LastName;
+            userToUpdate.PhoneNumber = guestForUpdatingDto.PhoneNumber;
+            userToUpdate.IdentityNumber = guestForUpdatingDto.IdentityNumber;
+
+
             await _guestRepository.Update(entityData);
+            _context.Users.Update(userToUpdate);
+            await _context.SaveChangesAsync();
         }
         public Task SaveGuest() => _guestRepository.Save();
     }
