@@ -39,6 +39,12 @@ namespace HotelManagment.Service.Mapping
             CreateMap<GuestRegistrationRequestDto, ApplicationUser>()
                .ForMember(dest => dest.UserName, options => options.MapFrom(src => src.IdentityNumber))
                .ForMember(dest => dest.NormalizedUserName, options => options.MapFrom(src => src.IdentityNumber));
+            CreateMap<RegistrationRequestDto, ApplicationUser>()
+               .ForMember(dest => dest.UserName, options => options.MapFrom(src => src.IdentityNumber))
+               .ForMember(dest => dest.NormalizedUserName, options => options.MapFrom(src => src.IdentityNumber));
+            CreateMap<ManagerRegistrationRequestDto, ApplicationUser>()
+               .ForMember(dest => dest.UserName, options => options.MapFrom(src => src.IdentityNumber))
+               .ForMember(dest => dest.NormalizedUserName, options => options.MapFrom(src => src.IdentityNumber));
         }
     }
 }

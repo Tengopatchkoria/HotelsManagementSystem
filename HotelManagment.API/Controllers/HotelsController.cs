@@ -150,6 +150,7 @@ namespace HotelManagment.API.Controllers
 
 
         [HttpPost("guest/add")]
+        [Authorize]
         public async Task<IActionResult> AddGuest([FromForm] GuestForCreatingDto model)
         {
             await _guestService.AddGuest(model);
@@ -158,7 +159,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpDelete("guest/delete/{guestId}")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RemoveGuest([FromRoute] int guestId)
         {
             await _guestService.RemoveGuest(guestId);
@@ -167,6 +168,7 @@ namespace HotelManagment.API.Controllers
             return StatusCode(response.StatusCode, response);
         }
         [HttpPut("guest/update")]
+        [Authorize]
         public async Task<IActionResult> UpdateGuest([FromForm] GuestForUpdatingDto model)
         {
             await _guestService.UpdateGuest(model);

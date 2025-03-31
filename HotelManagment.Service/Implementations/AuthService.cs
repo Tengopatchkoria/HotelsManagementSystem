@@ -3,6 +3,7 @@ using HotelManagment.Models.Dtos.Guest;
 using HotelManagment.Models.Dtos.Idenitity;
 using HotelManagment.Models.Entities;
 using HotelManagment.Repository.Data;
+using HotelManagment.Repository.Implementations;
 using HotelManagment.Repository.Interfaces;
 using HotelManagment.Service.Exceptions;
 using HotelManagment.Service.Interfaces;
@@ -22,6 +23,7 @@ namespace HotelManagment.Service.Implementations
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IGuestRepository _guestRepository;
+        private readonly IManagerRepository _managerRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IMapper _mapper;
         private const string _adminRole = "Admin";
@@ -35,7 +37,8 @@ namespace HotelManagment.Service.Implementations
                 RoleManager<IdentityRole> roleManager,
                 IJwtTokenGenerator jwtTokenGenerator,
                 IMapper mapper,
-                IGuestRepository guestRepository
+                IGuestRepository guestRepository,
+                IManagerRepository managerRepository
             )
         {
             _context = context;
@@ -44,6 +47,7 @@ namespace HotelManagment.Service.Implementations
             _jwtTokenGenerator = jwtTokenGenerator;
             _mapper = mapper;
             _guestRepository = guestRepository;
+            _managerRepository = managerRepository;
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
@@ -136,15 +140,31 @@ namespace HotelManagment.Service.Implementations
             }
         }
 
-        public async Task RegisterManager(RegistrationRequestDto registrationRequestDto)
+        public async Task RegisterManager(ManagerRegistrationRequestDto managerRegistrationRequestDto)
         {
-            var user = _mapper.Map<ApplicationUser>(registrationRequestDto);
-            var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);
+            var user = _mapper.Map<ApplicationUser>(managerRegistrationRequestDto);
+            var result = await _userManager.CreateAsync(user, managerRegistrationRequestDto.Password);
+            
+            var ManagerEntity = new Manager()
+            {
+                IdentityNumber = managerRegistrationRequestDto.IdentityNumber,
+                FirstName = managerRegistrationRequestDto.FirstName,
+                LastName = managerRegistrationRequestDto.LastName,
+                PhoneNumber = managerRegistrationRequestDto.PhoneNumber,
+                Email = managerRegistrationRequestDto.Email
+            };
+
+            var CheckManager = await _managerRepository.GetAsync
+                (x => x.IdentityNumber.ToLower().Trim() == managerRegistrationRequestDto.IdentityNumber.ToLower().Trim() &&
+                x.Email.ToLower().Trim() == managerRegistrationRequestDto.Email.ToLower().Trim());
+
+            if (CheckManager is not null)
+                throw new AmbigousNameException("Manager Already Registered");
 
             if (result.Succeeded)
             {
                 var userToReturn = await _context.ApplicationUsers
-                    .FirstOrDefaultAsync(x => x.IdentityNumber.ToLower().Trim() == registrationRequestDto.IdentityNumber.ToLower().Trim());
+                    .FirstOrDefaultAsync(x => x.IdentityNumber.ToLower().Trim() == managerRegistrationRequestDto.IdentityNumber.ToLower().Trim());
 
                 if (userToReturn is not null)
                 {
@@ -152,6 +172,8 @@ namespace HotelManagment.Service.Implementations
                         await _roleManager.CreateAsync(new IdentityRole(_managerRole));
 
                     await _userManager.AddToRoleAsync(userToReturn, _managerRole);
+                    await _managerRepository.AddAsync(ManagerEntity);
+                    await _managerRepository.Save();
                 }
             }
             else

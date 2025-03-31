@@ -38,7 +38,7 @@ namespace HotelManagment.API.Controllers
         }
         [HttpPost("registerManager")]
         [Authorize(Roles = "Manager, Admin")]
-        public async Task<IActionResult> RegisterManager([FromForm] RegistrationRequestDto model)
+        public async Task<IActionResult> RegisterManager([FromForm] ManagerRegistrationRequestDto model)
         {
             await _authService.RegisterManager(model);
             ApiResponse response = new(ApiResponseMessage.successMessage, model, 201, isSuccess: true);

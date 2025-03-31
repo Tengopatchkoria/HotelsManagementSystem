@@ -10,7 +10,7 @@ namespace HotelManagment.Service.Interfaces
     public interface IAuthService
     {
         Task RegisterGuest(GuestRegistrationRequestDto guestRegistrationRequestDto);
-        Task RegisterManager(RegistrationRequestDto registrationRequestDto);
+        Task RegisterManager(ManagerRegistrationRequestDto managerRegistrationRequestDto);
         Task RegisterAdmin(RegistrationRequestDto registrationRequestDto);
         Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
     }
